@@ -1,0 +1,14 @@
+services:
+  db:
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    volumes:
+      - dbvolume:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=superuser
+      - POSTGRES_USER=superuser
+      - POSTGRES_DB=multiquiz
+
+volumes:
+  dbvolume:
