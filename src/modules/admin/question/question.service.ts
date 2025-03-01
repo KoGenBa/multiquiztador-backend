@@ -1,28 +1,74 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { CreateQuestionDto } from './dto/create-question.dto';
-import { UpdateQuestionDto } from './dto/update-question.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { DeleteResult, In, Repository } from 'typeorm';
+import { Question, Tag } from 'src/lib/database/entities';
+import { CreateQuestionDto, UpdateQuestionDto } from './dto';
 
 @Injectable()
 export class QuestionService {
   private readonly logger = new Logger(QuestionService.name);
 
-  create(createQuestionDto: CreateQuestionDto) {
-    return 'This action adds a new question';
+  constructor(
+    @InjectRepository(Question)
+    private readonly questionRepository: Repository<Question>,
+    @InjectRepository(Tag)
+    private readonly tagRepository: Repository<Tag>,
+  ) {}
+
+  async create(dto: CreateQuestionDto): Promise<Question> {
+    try {
+      const { tags, ...rest } = dto;
+      let question = this.questionRepository.create(rest);
+      if (tags) {
+        question = await this.setQuestionTags(question, tags);
+      }
+      await this.questionRepository.save(question);
+
+      return question;
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
   }
 
-  findAll() {
-    return `This action returns all question`;
+  async findAll(): Promise<Question[]> {
+    return this.questionRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} question`;
+  async findOne(id: number): Promise<Question> {
+    return this.questionRepository.findOne({ where: { id } });
   }
 
-  update(id: number, updateQuestionDto: UpdateQuestionDto) {
-    return `This action updates a #${id} question`;
+  async update(id: number, dto: UpdateQuestionDto): Promise<Question> {
+    try {
+      const { tags, ...rest } = dto;
+      let question = await this.questionRepository.findOne({ where: { id } });
+      for (const key in rest) {
+        question[key] = rest[key];
+      }
+      if (tags) {
+        question = await this.setQuestionTags(question, tags);
+      }
+      await this.questionRepository.save(question);
+
+      return question;
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} question`;
+  async remove(id: number): Promise<DeleteResult> {
+    return this.questionRepository.delete({ id });
+  }
+
+  private async setQuestionTags(
+    question: Question,
+    tags: string[],
+  ): Promise<Question> {
+    question.tags = await this.tagRepository.find({
+      where: { key: In(tags) },
+    });
+    return question;
   }
 }
