@@ -6,11 +6,17 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('login')
-  login() {}
+  login() {
+    return;
+  }
 
   @Post('logout')
-  logout() {}
+  logout() {
+    return;
+  }
 
-  @Get('currentnpm ')
-  getCurrentUser() {}
+  @Get('currentnpm')
+  getCurrentUser() {
+    return null;
+  }
 }

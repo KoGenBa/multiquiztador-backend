@@ -1,9 +1,14 @@
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
 import { BaseEntity } from './base.entity';
 import { Question } from './question.entity';
 
 @Entity()
 export class Tag extends BaseEntity {
+  @ApiProperty({
+    type: 'string',
+    example: 'records',
+  })
   @Column({
     unique: true,
     name: 'key',
@@ -12,6 +17,10 @@ export class Tag extends BaseEntity {
   })
   key: string;
 
+  @ApiProperty({
+    type: 'string',
+    example: 'Рекорды',
+  })
   @Column({
     name: 'title',
     type: 'varchar',
@@ -19,6 +28,10 @@ export class Tag extends BaseEntity {
   })
   title: string;
 
+  @ApiPropertyOptional({
+    type: 'string',
+    example: 'Самые самые',
+  })
   @Column({
     name: 'description',
     type: 'varchar',
@@ -27,13 +40,17 @@ export class Tag extends BaseEntity {
   })
   description: string;
 
+  @ApiProperty({
+    type: () => Question,
+    isArray: true,
+  })
   @JoinTable({
     name: 'question_tag',
     joinColumn: {
-      name: 'question_id',
+      name: 'tag_id',
     },
     inverseJoinColumn: {
-      name: 'tag_id',
+      name: 'question_id',
     },
   })
   @ManyToMany(() => Question, (question) => question.tags)

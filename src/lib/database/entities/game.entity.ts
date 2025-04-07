@@ -1,3 +1,4 @@
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   Column,
   Entity,
@@ -14,6 +15,10 @@ import { PlayerAnswer } from './player.answer.entity';
 
 @Entity()
 export class Game extends BaseEntity {
+  @ApiPropertyOptional({
+    type: 'string',
+    example: 'comment',
+  })
   @Column({
     name: 'comment',
     type: 'varchar',
@@ -22,6 +27,10 @@ export class Game extends BaseEntity {
   })
   comment: string;
 
+  @ApiProperty({
+    type: 'number',
+    example: 42,
+  })
   @Column({
     name: 'questions_used',
     type: 'int',
@@ -29,6 +38,10 @@ export class Game extends BaseEntity {
   })
   questionsUsed: number;
 
+  @ApiProperty({
+    type: 'number',
+    example: 13,
+  })
   @Column({
     name: 'players_participated',
     type: 'int',
@@ -36,6 +49,10 @@ export class Game extends BaseEntity {
   })
   playersParticipated: number;
 
+  @ApiProperty({
+    type: 'number',
+    example: 9,
+  })
   @Column({
     name: 'unique_topics',
     type: 'int',
@@ -43,6 +60,10 @@ export class Game extends BaseEntity {
   })
   uniqueTopics: number;
 
+  @ApiProperty({
+    type: 'number',
+    example: 0.0,
+  })
   @Column({
     name: 'min_delta',
     type: 'float',
@@ -50,6 +71,10 @@ export class Game extends BaseEntity {
   })
   minDelta: number;
 
+  @ApiProperty({
+    type: 'number',
+    example: 6.9,
+  })
   @Column({
     name: 'max_delta',
     type: 'float',
@@ -57,6 +82,10 @@ export class Game extends BaseEntity {
   })
   maxDelta: number;
 
+  @ApiProperty({
+    type: 'number',
+    example: 4.2,
+  })
   @Column({
     name: 'mean_squared_error',
     type: 'float',
@@ -64,6 +93,10 @@ export class Game extends BaseEntity {
   })
   meanSquaredError: number;
 
+  @ApiProperty({
+    type: 'number',
+    example: 12,
+  })
   @Column({
     name: 'top_score',
     type: 'int',
@@ -71,6 +104,10 @@ export class Game extends BaseEntity {
   })
   topScore: number;
 
+  @ApiProperty({
+    type: 'string',
+    example: '00000000-0000-0000-0000-000000000000',
+  })
   @Column({
     name: 'winner_id',
     type: 'uuid',
@@ -78,6 +115,10 @@ export class Game extends BaseEntity {
   })
   winnerId: string;
 
+  @ApiProperty({
+    type: () => Player,
+    isArray: true,
+  })
   @JoinTable({
     name: 'game_player',
     joinColumn: {
@@ -90,24 +131,35 @@ export class Game extends BaseEntity {
   @ManyToMany(() => Player, (player) => player.gamesParticipated)
   players: Player[];
 
+  @ApiProperty({
+    type: () => Player,
+  })
   @JoinColumn({
     name: 'winner_id',
   })
   @ManyToOne(() => Player, { onDelete: 'SET NULL' })
   winner: Player;
 
+  @ApiProperty({
+    type: () => Question,
+    isArray: true,
+  })
   @JoinTable({
     name: 'game_question',
     joinColumn: {
-      name: 'game_id',
+      name: 'question_id',
     },
     inverseJoinColumn: {
-      name: 'question_id',
+      name: 'game_id',
     },
   })
   @ManyToMany(() => Question, (question) => question.games)
   questions: Question[];
 
+  @ApiProperty({
+    type: () => PlayerAnswer,
+    isArray: true,
+  })
   @OneToMany(() => PlayerAnswer, (answer) => answer.game)
   playerAnswers: PlayerAnswer[];
 }

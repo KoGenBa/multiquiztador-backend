@@ -4,6 +4,7 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  MaxLength,
 } from '@nestjs/class-validator';
 
 export class CreateQuestionDto {
@@ -16,6 +17,7 @@ export class CreateQuestionDto {
 
   @IsOptional()
   @IsString()
+  @MaxLength(500)
   comment?: string;
 
   @IsOptional()
