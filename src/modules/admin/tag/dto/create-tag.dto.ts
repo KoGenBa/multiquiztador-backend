@@ -1,7 +1,6 @@
-import { ITopic } from 'src/lib/type';
 import { IsNotEmpty, IsOptional, IsString } from '@nestjs/class-validator';
 
-export class CreateTagDto implements ITopic {
+export class CreateTagDto {
   @IsString()
   @IsNotEmpty()
   key: string;

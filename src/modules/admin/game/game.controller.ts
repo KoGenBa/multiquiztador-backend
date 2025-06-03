@@ -16,8 +16,8 @@ export class GameController {
   constructor(private readonly gameService: GameService) {}
 
   @Post()
-  create(@Body() createGameDto: CreateGameDto) {
-    return this.gameService.create(createGameDto);
+  create(@Body() dto: CreateGameDto) {
+    return this.gameService.create(dto);
   }
 
   @Get()
@@ -31,8 +31,8 @@ export class GameController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateGameDto: UpdateGameDto) {
-    return this.gameService.update(+id, updateGameDto);
+  update(@Param('id') id: string, @Body() dto: UpdateGameDto) {
+    return this.gameService.update(+id, dto);
   }
 
   @Delete(':id')

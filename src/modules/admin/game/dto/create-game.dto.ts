@@ -1,3 +1,10 @@
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { IsOptional, IsString, MaxLength } from '@nestjs/class-validator';
+
 export class CreateGameDto {
-  id: number;
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  @MaxLength(250)
+  gameTitle?: string;
 }

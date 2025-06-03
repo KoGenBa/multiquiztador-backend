@@ -66,7 +66,7 @@ export class TagService {
   async remove(id: number): Promise<Tag> {
     try {
       const tag = await this.tagRepository.findOneBy({ id });
-      await this.tagRepository.delete(tag);
+      await this.tagRepository.remove(tag);
       return tag;
     } catch (error) {
       this.logger.error(error);
