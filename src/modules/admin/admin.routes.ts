@@ -4,6 +4,7 @@ import { AuthModule } from './auth';
 import { GameModule } from './game';
 import { QuestionModule } from './question';
 import { TagModule } from './tag';
+import { UserModule } from './user';
 
 const path = '/admin';
 
@@ -12,6 +13,7 @@ const modules: Array<Type<any> | DynamicModule | Promise<DynamicModule>> = [
   GameModule,
   QuestionModule,
   TagModule,
+  UserModule,
 ];
 
 export const routes: Routes = modules.map((module) => ({
