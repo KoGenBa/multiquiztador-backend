@@ -14,7 +14,7 @@ import { Player } from './player.entity';
 import { Question } from './question.entity';
 import { PlayerAnswer } from './player.answer.entity';
 import { EGameState, EWordForm } from 'src/lib/type';
-import { nouns, adjectives } from 'src/lib/const';
+import { nouns, adjectives, nounsR18, adjectivesR18 } from 'src/lib/const';
 import { Admin } from './admin.entity';
 
 @Entity()
@@ -157,6 +157,17 @@ export class Game extends BaseEntity {
   winnerId: string;
 
   @ApiProperty({
+    type: 'boolean',
+    example: true,
+  })
+  @Column({
+    name: 'allow_r18',
+    type: 'boolean',
+    nullable: true,
+  })
+  allowR18: boolean;
+
+  @ApiProperty({
     type: () => Admin,
   })
   @ManyToOne(() => Admin)
@@ -222,7 +233,11 @@ export class Game extends BaseEntity {
         EWordForm.NEUTRAL,
         EWordForm.PLURAL,
       ][Math.trunc(Math.random() * 4)];
-      const title = `${adjectives[Math.trunc(Math.random() * adjectives.length)]?.[preferredForm]} ${nouns.filter(({ form }) => form === preferredForm).sort(() => Math.random() - 0.5)[0]?.value}`;
+      const adjList = adjectives.concat(this.allowR18 ? adjectivesR18 : []);
+      const nounList = nouns
+        .concat(this.allowR18 ? nounsR18 : [])
+        .filter(({ form }) => form === preferredForm);
+      const title = `${adjList[Math.trunc(Math.random() * adjList.length)]?.[preferredForm]} ${nounList.sort(() => Math.random() - 0.5)[0]?.value}`;
       this.gameTitle = `${title[0].toLocaleUpperCase()}${title.slice(1)}`;
     }
   }

@@ -6,16 +6,29 @@ import {
   Patch,
   Param,
   Delete,
+  HttpStatus,
 } from '@nestjs/common';
+import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { GameService } from './game.service';
 import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
+import { Game } from '../../../lib/database/entities';
 
 @Controller('game')
 export class GameController {
   constructor(private readonly gameService: GameService) {}
 
   @Post()
+  @ApiOperation({
+    description: 'Начать новую игру',
+  })
+  @ApiBody({
+    type: CreateGameDto,
+  })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    type: () => Game,
+  })
   create(@Body() dto: CreateGameDto) {
     return this.gameService.create(dto);
   }

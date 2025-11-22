@@ -1,5 +1,10 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional, IsString, MaxLength } from '@nestjs/class-validator';
+import {
+  IsBoolean,
+  IsOptional,
+  IsString,
+  MaxLength,
+} from '@nestjs/class-validator';
 
 export class CreateGameDto {
   @ApiPropertyOptional()
@@ -7,4 +12,9 @@ export class CreateGameDto {
   @IsString()
   @MaxLength(250)
   gameTitle?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsBoolean()
+  allowR18?: boolean;
 }
