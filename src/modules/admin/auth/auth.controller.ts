@@ -15,7 +15,7 @@ export class AuthController {
     return;
   }
 
-  @Get('currentnpm')
+  @Get('currentgm')
   getCurrentUser() {
     return null;
   }

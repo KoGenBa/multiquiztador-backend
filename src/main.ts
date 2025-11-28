@@ -15,7 +15,7 @@ async function bootstrap() {
   logger = config.logger;
   const documentBuilder = new DocumentBuilder()
     .setTitle('Multiquiztador')
-    .setVersion('0.0.1')
+    .setVersion(process.env.npm_package_version ?? '0.0.1')
     .setDescription(
       'Fast-paced numeric game for duels and large companies alike',
     )

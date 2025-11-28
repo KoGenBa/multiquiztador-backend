@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
-import { AuthModule } from './auth';
-import { GameModule } from './game';
+import { playerRoutes } from './player.routes';
 
 @Module({
-  imports: [AuthModule, GameModule],
+  imports: [...playerRoutes],
   controllers: [],
   providers: [],
 })

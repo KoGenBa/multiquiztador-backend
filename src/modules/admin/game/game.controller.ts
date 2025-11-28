@@ -12,7 +12,7 @@ import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { GameService } from './game.service';
 import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
-import { Game } from '../../../lib/database/entities';
+import { Game } from 'src/lib/database/entities';
 
 @Controller('game')
 export class GameController {
