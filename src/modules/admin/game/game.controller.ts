@@ -33,6 +33,14 @@ export class GameController {
     return this.gameService.create(dto);
   }
 
+  @Post('/finish')
+  @ApiOperation({
+    description: 'Закончить игру и подсчитать результаты',
+  })
+  calculate(@Body('gameId') gameId: number) {
+    return this.gameService.calculateGame(gameId);
+  }
+
   @Get()
   findAll() {
     return this.gameService.findAll();
