@@ -1,7 +1,7 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { mockPlayers, mockQuestions, getMockPlayerAnswers } from 'src/lib/const';
+import { getMockPlayerAnswers, generateMockQuestions, generateMockPlayers } from 'src/lib/const';
 import { Game, Player, PlayerAnswer, Question } from 'src/lib/database/entities';
 import { EPlayerTitles, IGamePlayerStats } from 'src/lib/type';
 import { CreateGameDto, UpdateGameDto } from './dto';
@@ -59,9 +59,9 @@ export class GameService {
     // const players = await this.playerRepository.find({
     //   where: { gamesParticipated: { id: gameId } },
     // });
-    const questions = mockQuestions;
-    const players = mockPlayers;
-    const playerAnswers = getMockPlayerAnswers(gameId, mockQuestions, mockPlayers);
+    const questions = generateMockQuestions(10);
+    const players = generateMockPlayers(5);
+    const playerAnswers = getMockPlayerAnswers(gameId, questions, players);
 
     const playerScores: Record<string, IGamePlayerStats> = Object.fromEntries(
       players.map(

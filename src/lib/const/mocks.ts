@@ -1,10 +1,34 @@
 import { Player, PlayerAnswer, Question } from 'src/lib/database/entities';
+const generateNumber = (upper?: number, lower?: number, decimal?: boolean) => {
+  upper ??= 100;
+  lower ??= 0;
+  decimal ??= false;
+  const value = Math.random() * (upper - lower) + lower;
+  if (decimal) {
+    return Math.trunc(value * 100) / 100;
+  }
+  return Math.trunc(value);
+};
 
 export const generateMockQuestions = (qt?: number, answers?: number[]): Question[] => {
-  return [];
+  return Array(qt ?? 5).fill(1).map((_, index) => mockQuestion(index + 1));
 };
 const mockQuestion = (id: number, answer?: number): Question => {
-  return null;
+  return {
+    id,
+    question: `Question #${id} text`,
+    answer: answer ?? generateNumber(0, 120, Math.random() > 0.6),
+    comment: null,
+    minDelta: 0,
+    maxDelta: 0,
+    tags: [],
+    playerAnswers: [],
+    games: [],
+    meanSquaredError: 0,
+    version: 1,
+    createdAt: new Date('2025-11-28'),
+    updatedAt: new Date('2025-11-28'),
+  };
 };
 
 export const mockQuestions: Question[] = [
@@ -84,6 +108,23 @@ export const mockQuestions: Question[] = [
     updatedAt: new Date('2025-11-28'),
   },
 ];
+
+export const generateMockPlayers = (qt?: number): Player[] => {
+  return Array(qt ?? 3).fill(1).map((_, index) => mockPlayer((index + 1).toString()));
+};
+const mockPlayer = (id: string, displayName?: string): Player => {
+  return {
+    id,
+    displayName: displayName ?? `Player ${id}`,
+    score: 0,
+    gamesParticipated: [],
+    answers: [],
+    version: 1,
+    createdAt: new Date('2025-11-28'),
+    updatedAt: new Date('2025-11-28'),
+  };
+};
+
 export const mockPlayers: Player[] = [
   {
     id: '1',
