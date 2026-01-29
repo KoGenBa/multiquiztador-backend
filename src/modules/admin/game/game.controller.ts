@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { GameService } from './game.service';
-import { CreateGameDto, UpdateGameDto } from './dto';
+import { CreateGameDto, FinishGameDto, UpdateGameDto } from './dto';
 import { Game } from 'src/lib/database/entities';
 
 @Controller('game')
@@ -36,8 +36,8 @@ export class GameController {
   @ApiOperation({
     description: 'Закончить игру и подсчитать результаты',
   })
-  calculate(@Body('gameId') gameId: number) {
-    return this.gameService.calculateGame(gameId);
+  calculate(@Body() dto: FinishGameDto) {
+    return this.gameService.calculateGame(dto.gameId);
   }
 
   @Get()

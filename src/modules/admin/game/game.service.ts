@@ -50,18 +50,18 @@ export class GameService {
       this.logger.error(error);
       throw new NotFoundException('Game with specified ID not found');
     }
-    // const playerAnswers = await this.playerAnswerRepository.find({
-    //   where: { gameId },
-    // });
-    // const questions = await this.questionRepository.find({
-    //   where: { games: { id: gameId } },
-    // });
-    // const players = await this.playerRepository.find({
-    //   where: { gamesParticipated: { id: gameId } },
-    // });
-    const questions = generateMockQuestions(10);
-    const players = generateMockPlayers(5);
-    const playerAnswers = getMockPlayerAnswers(gameId, questions, players);
+    const playerAnswers = await this.playerAnswerRepository.find({
+      where: { gameId },
+    });
+    const questions = await this.questionRepository.find({
+      where: { games: { id: gameId } },
+    });
+    const players = await this.playerRepository.find({
+      where: { gamesParticipated: { id: gameId } },
+    });
+    // const questions = generateMockQuestions(10);
+    // const players = generateMockPlayers(5);
+    // const playerAnswers = getMockPlayerAnswers(gameId, questions, players);
 
     const playerScores: Record<string, IGamePlayerStats> = Object.fromEntries(
       players.map(
@@ -81,7 +81,7 @@ export class GameService {
     const maxScore = Math.max(players.length - 1, 1);
     for (const question of questions) {
       const questionAnswers = playerAnswers.filter(({ questionId }) => questionId === question.id);
-      const maxDelta = questionAnswers.toSorted((a, b) => b.deviation - a.deviation)[0].deviation;
+      const maxDelta = questionAnswers.toSorted((a, b) => b.deviation - a.deviation)[0]?.deviation ?? 0;
       for (const qa of questionAnswers) {
         const player = playerScores[qa.playerId];
         player.totalDelta += qa.deviation;
@@ -101,7 +101,10 @@ export class GameService {
     }
     const results = Object.values(playerScores).toSorted((a, b) => b.score - a.score);
     const minTotalDeltaUser = Object.values(playerScores).toSorted((a, b) => a.totalDelta - b.totalDelta)[0];
-    results.find((player) => player.id === minTotalDeltaUser.id).titles.push(EPlayerTitles.BEST_AVERAGE);
+    const bestAverageUser = results.find((player) => player.id === minTotalDeltaUser.id);
+    if ('titles' in (bestAverageUser ?? {})) {
+      bestAverageUser.titles.push(EPlayerTitles.BEST_AVERAGE);
+    }
     const [goldScore, silverScore, bronzeScore] = Array.from(new Set(results.map(({ score }) => score))).toSorted((a, b) => b - a);
     results.forEach((res) => {
         if (res.score === goldScore) {
