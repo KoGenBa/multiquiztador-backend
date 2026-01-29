@@ -1,4 +1,11 @@
-import { Player, PlayerAnswer, Question } from "../database/entities";
+import { Player, PlayerAnswer, Question } from 'src/lib/database/entities';
+
+export const generateMockQuestions = (qt?: number, answers?: number[]): Question[] => {
+  return [];
+};
+const mockQuestion = (id: number, answer?: number): Question => {
+  return null;
+};
 
 export const mockQuestions: Question[] = [
   {
@@ -108,6 +115,36 @@ export const mockPlayers: Player[] = [
     createdAt: new Date('2025-11-28'),
     updatedAt: new Date('2025-11-28'),
   },
+  {
+    id: '4',
+    displayName: 'Player 4',
+    score: 0,
+    gamesParticipated: [],
+    answers: [],
+    version: 1,
+    createdAt: new Date('2025-11-28'),
+    updatedAt: new Date('2025-11-28')
+  },
+  {
+    id: '5',
+    displayName: 'Player 5',
+    score: 0,
+    gamesParticipated: [],
+    answers: [],
+    version: 1,
+    createdAt: new Date('2025-11-28'),
+    updatedAt: new Date('2025-11-28')
+  },
+  {
+    id: '6',
+    displayName: 'Player 6',
+    score: 0,
+    gamesParticipated: [],
+    answers: [],
+    version: 1,
+    createdAt: new Date('2025-11-28'),
+    updatedAt: new Date('2025-11-28')
+  },
 ];
 export const getMockPlayerAnswers = (gameId: number, questions: Question[], players: Player[]): PlayerAnswer[] => {
   return Array(questions.length * players.length)
@@ -115,7 +152,7 @@ export const getMockPlayerAnswers = (gameId: number, questions: Question[], play
     .map((_, index) => {
       const question = questions[Math.trunc(index / players.length)];
       const player = players[index % players.length];
-      let delta = Math.random() * question.answer * 2 - question.answer;
+      let delta = Math.trunc((Math.random() * question.answer * 2 - question.answer) * 100) / 100;
       if (Math.random() < 0.1) {
         delta = 0;
       }
@@ -126,7 +163,7 @@ export const getMockPlayerAnswers = (gameId: number, questions: Question[], play
         playerId: player.id,
         gameId,
         value: question.answer + delta,
-        deviation: 0,
+        deviation: Math.abs(delta),
         question: null,
         player: null,
         game: null,

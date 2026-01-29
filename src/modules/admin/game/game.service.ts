@@ -1,10 +1,10 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { mockPlayers, mockQuestions, getMockPlayerAnswers } from 'src/lib/const';
 import { Game, Player, PlayerAnswer, Question } from 'src/lib/database/entities';
-import { CreateGameDto } from './dto/create-game.dto';
-import { UpdateGameDto } from './dto/update-game.dto';
-import { mockPlayers, mockQuestions, getMockPlayerAnswers } from 'src/lib/const'
+import { EPlayerTitles, IGamePlayerStats } from 'src/lib/type';
+import { CreateGameDto, UpdateGameDto } from './dto';
 
 @Injectable()
 export class GameService {
@@ -56,10 +56,64 @@ export class GameService {
     // const questions = await this.questionRepository.find({
     //   where: { games: { id: gameId } },
     // });
+    // const players = await this.playerRepository.find({
+    //   where: { gamesParticipated: { id: gameId } },
+    // });
     const questions = mockQuestions;
     const players = mockPlayers;
     const playerAnswers = getMockPlayerAnswers(gameId, mockQuestions, mockPlayers);
 
-    return { questions, players, playerAnswers };
+    const playerScores: Record<string, IGamePlayerStats> = Object.fromEntries(
+      players.map(
+        (player) => [
+          player.id,
+          {
+            id: player.id,
+            displayName: player.displayName,
+            questions: [],
+            score: 0,
+            totalDelta: 0,
+            titles: [],
+          },
+        ],
+      )
+    );
+    const maxScore = Math.max(players.length - 1, 1);
+    for (const question of questions) {
+      const questionAnswers = playerAnswers.filter(({ questionId }) => questionId === question.id);
+      const maxDelta = questionAnswers.toSorted((a, b) => b.deviation - a.deviation)[0].deviation;
+      for (const qa of questionAnswers) {
+        const player = playerScores[qa.playerId];
+        player.totalDelta += qa.deviation;
+        let score = maxScore;
+        if (maxDelta !== 0) {
+          score = Math.trunc(maxScore * ((maxDelta - qa.deviation) / maxDelta) * 10) / 10;
+          if (qa.deviation / question.answer < 0.1 && !player.titles.includes(EPlayerTitles.BULLSEYE)) {
+            player.titles.push(EPlayerTitles.BULLSEYE);
+          }
+        }
+        player.questions.push({
+          ...qa,
+          score,
+        });
+        player.score += score;
+      }
+    }
+    const results = Object.values(playerScores).toSorted((a, b) => b.score - a.score);
+    const minTotalDeltaUser = Object.values(playerScores).toSorted((a, b) => a.totalDelta - b.totalDelta)[0];
+    results.find((player) => player.id === minTotalDeltaUser.id).titles.push(EPlayerTitles.BEST_AVERAGE);
+    const [goldScore, silverScore, bronzeScore] = Array.from(new Set(results.map(({ score }) => score))).toSorted((a, b) => b - a);
+    results.forEach((res) => {
+        if (res.score === goldScore) {
+          res.titles.push(EPlayerTitles.MEDAL_GOLD);
+        }
+        if (res.score === silverScore) {
+          res.titles.push(EPlayerTitles.MEDAL_SILVER);
+        }
+        if (res.score === bronzeScore) {
+          res.titles.push(EPlayerTitles.MEDAL_BRONZE);
+        }
+      });
+    return Object.values(results);
   }
 }

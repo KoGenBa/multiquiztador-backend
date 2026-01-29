@@ -1,3 +1,4 @@
+import { Logger } from '@nestjs/common';
 import {
   ConnectedSocket,
   MessageBody,
@@ -12,14 +13,17 @@ import { GameService } from './game.service';
 
 @WebSocketGateway()
 export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
-  constructor(private readonly gameService: GameService) {}
+  private readonly logger: Logger;
+  constructor(private readonly gameService: GameService) {
+    this.logger = new Logger('GameGateway');
+  }
 
   public async handleConnection(client: any, ...args: any[]) {
-    console.log(client);
+    this.logger.log({ event: 'client connected', client });
   }
 
   public async handleDisconnect(client: any) {
-    
+    this.logger.log({ event: 'client disconnected', client });
   }
 
   @SubscribeMessage('player.join')
@@ -34,5 +38,8 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   public async processPlayerLeaveEvent() {}
 
   @SubscribeMessage('player.answer')
-  public async processPlayerAnswerEvent() {}
+  public async processPlayerAnswerEvent(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() body: UserAnswerDto,
+  ) {}
 }
