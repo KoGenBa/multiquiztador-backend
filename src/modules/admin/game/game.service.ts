@@ -1,10 +1,10 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { getMockPlayerAnswers, generateMockQuestions, generateMockPlayers } from 'src/lib/const';
 import { Game, Player, PlayerAnswer, Question } from 'src/lib/database/entities';
-import { EPlayerTitles, IGamePlayerStats } from 'src/lib/type';
-import { CreateGameDto, UpdateGameDto } from './dto';
+import { EGameState, EPlayerTitles, IGamePlayerStats } from 'src/lib/type';
+import { getQuestionCount } from 'src/lib/const';
+import { CreateGameDto, StartGameDto, UpdateGameDto } from './dto';
 
 @Injectable()
 export class GameService {
@@ -12,14 +12,14 @@ export class GameService {
 
   constructor(
     @InjectRepository(Game)
-        private readonly gameRepository: Repository<Game>,
-        @InjectRepository(Player)
-        private readonly playerRepository: Repository<Player>,
-        @InjectRepository(PlayerAnswer)
-        private readonly playerAnswerRepository: Repository<PlayerAnswer>,
-        @InjectRepository(Question)
-        private readonly questionRepository: Repository<Question>,
-  ) {}
+    private readonly gameRepository: Repository<Game>,
+    @InjectRepository(Player)
+    private readonly playerRepository: Repository<Player>,
+    @InjectRepository(PlayerAnswer)
+    private readonly playerAnswerRepository: Repository<PlayerAnswer>,
+    @InjectRepository(Question)
+    private readonly questionRepository: Repository<Question>,
+  ) { }
 
   async create(dto: CreateGameDto) {
     const game = this.gameRepository.create(dto);
@@ -44,24 +44,28 @@ export class GameService {
   }
 
   public async calculateGame(gameId: number) {
-    try {
-      const game = await this.gameRepository.findOneByOrFail({ id: gameId });
-    } catch (error) {
-      this.logger.error(error);
-      throw new NotFoundException('Game with specified ID not found');
+    const game = await this.gameRepository.findOne({
+      where: { id: gameId },
+      relations: {
+        players: true,
+        questions: true,
+        playerAnswers: true,
+      },
+    });
+    if (!game) {
+      throw new NotFoundException('Game with specified ID is not found!');
     }
-    const playerAnswers = await this.playerAnswerRepository.find({
-      where: { gameId },
-    });
-    const questions = await this.questionRepository.find({
-      where: { games: { id: gameId } },
-    });
-    const players = await this.playerRepository.find({
-      where: { gamesParticipated: { id: gameId } },
-    });
-    // const questions = generateMockQuestions(10);
-    // const players = generateMockPlayers(5);
-    // const playerAnswers = getMockPlayerAnswers(gameId, questions, players);
+    const { players, playerAnswers, questions } = game;
+    if (!playerAnswers.length) {
+      throw new BadRequestException('No player answers are done for this game, cannot finish it!');
+    }
+    if (playerAnswers.length > questions.length * players.length) {
+      throw new ConflictException('Player answers number exceeds number of questions multiplied by number of players!');
+    }
+    if (game.gameState !== EGameState.FINISHED) {
+        game.gameState = EGameState.CALCULATING;
+        await this.gameRepository.save(game);
+      }
 
     const playerScores: Record<string, IGamePlayerStats> = Object.fromEntries(
       players.map(
@@ -107,16 +111,50 @@ export class GameService {
     }
     const [goldScore, silverScore, bronzeScore] = Array.from(new Set(results.map(({ score }) => score))).toSorted((a, b) => b - a);
     results.forEach((res) => {
-        if (res.score === goldScore) {
-          res.titles.push(EPlayerTitles.MEDAL_GOLD);
-        }
-        if (res.score === silverScore) {
-          res.titles.push(EPlayerTitles.MEDAL_SILVER);
-        }
-        if (res.score === bronzeScore) {
-          res.titles.push(EPlayerTitles.MEDAL_BRONZE);
-        }
-      });
+      if (res.score === goldScore) {
+        res.titles.push(EPlayerTitles.MEDAL_GOLD);
+      }
+      if (res.score === silverScore) {
+        res.titles.push(EPlayerTitles.MEDAL_SILVER);
+      }
+      if (res.score === bronzeScore) {
+        res.titles.push(EPlayerTitles.MEDAL_BRONZE);
+      }
+    });
+
+    if (game.gameState !== EGameState.FINISHED) {
+      game.gameState = EGameState.FINISHED;
+      await this.gameRepository.save(game);
+    }
     return Object.values(results);
+  }
+
+  public async startGame(dto: StartGameDto) {
+    const game = await this.gameRepository.findOne({
+      where: { id: dto.gameId },
+      relations: {
+        players: true,
+        questions: true,
+      },
+    });
+    if (!game) {
+      throw new NotFoundException('Game with specified ID is not found!');
+    }
+    if (![EGameState.CREATED, EGameState.PENDING].includes(game.gameState)) {
+      return game;
+    }
+    const players = await this.playerRepository.find({ where: { gamesParticipated: { id: dto.gameId } } });
+    const questionCount = dto.questionsQuantity ?? getQuestionCount(players?.length);
+    const questions = await this.questionRepository.find({
+      take: questionCount,
+      select: ['id', 'question'],
+      // order: [],
+    });
+    game.questions = questions;
+    game.questionsUsed = questions.length;
+    game.gameState = EGameState.ACTIVE;
+    await this.gameRepository.save(game);
+    // Object.fromEntries(Array(16).fill(0).map((_, i) => [i, getQuestionCount(i)]));
+    return game;
   }
 }

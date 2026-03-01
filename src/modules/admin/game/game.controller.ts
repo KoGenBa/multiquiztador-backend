@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { GameService } from './game.service';
-import { CreateGameDto, FinishGameDto, UpdateGameDto } from './dto';
+import { CreateGameDto, FinishGameDto, StartGameDto, UpdateGameDto } from './dto';
 import { Game } from 'src/lib/database/entities';
 
 @Controller('game')
@@ -38,6 +38,14 @@ export class GameController {
   })
   calculate(@Body() dto: FinishGameDto) {
     return this.gameService.calculateGame(dto.gameId);
+  }
+
+  @Post('/start')
+  @ApiOperation({
+    description: 'Начать игру с опциональным количеством вопросов',
+  })
+  start(@Body() dto: StartGameDto) {
+    return this.gameService.startGame(dto);
   }
 
   @Get()

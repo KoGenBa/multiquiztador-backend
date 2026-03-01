@@ -1,5 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Column, Entity, ManyToMany, OneToMany } from 'typeorm';
+import { BeforeInsert, Column, Entity, ManyToMany, OneToMany } from 'typeorm';
+import { EWordForm } from 'src/lib/type';
+import { adjectives, nouns } from 'src/lib/const';
 import { UserEntity } from './user.entity';
 import { Game } from './game.entity';
 import { PlayerAnswer } from './player.answer.entity';
@@ -41,4 +43,15 @@ export class Player extends UserEntity {
   })
   @OneToMany(() => PlayerAnswer, (answer) => answer.player)
   answers: PlayerAnswer[];
+
+  @BeforeInsert()
+  fillName() {
+    if (!this.displayName) {
+      const preferredForm = Math.random() >= 0.5 ? EWordForm.MALE : EWordForm.FEMALE;
+      const adjList = adjectives;
+      const nounList = nouns.filter(({ form }) => form === preferredForm);
+      const title = `${adjList[Math.trunc(Math.random() * adjList.length)]?.[preferredForm]} ${nounList.sort(() => Math.random() - 0.5)[0]?.value}`;
+      this.displayName = `${title[0].toLocaleUpperCase()}${title.slice(1)}`;
+    }
+  }
 }

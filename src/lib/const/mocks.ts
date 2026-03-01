@@ -122,6 +122,7 @@ const mockPlayer = (id: string, displayName?: string): Player => {
     version: 1,
     createdAt: new Date('2025-11-28'),
     updatedAt: new Date('2025-11-28'),
+    fillName: () => {},
   };
 };
 
@@ -135,6 +136,7 @@ export const mockPlayers: Player[] = [
     version: 1,
     createdAt: new Date('2025-11-28'),
     updatedAt: new Date('2025-11-28'),
+    fillName: () => {},
   },
   {
     id: '2',
@@ -145,6 +147,7 @@ export const mockPlayers: Player[] = [
     version: 1,
     createdAt: new Date('2025-11-28'),
     updatedAt: new Date('2025-11-28'),
+    fillName: () => {},
   },
   {
     id: '3',
@@ -155,6 +158,7 @@ export const mockPlayers: Player[] = [
     version: 1,
     createdAt: new Date('2025-11-28'),
     updatedAt: new Date('2025-11-28'),
+    fillName: () => {},
   },
   {
     id: '4',
@@ -164,7 +168,8 @@ export const mockPlayers: Player[] = [
     answers: [],
     version: 1,
     createdAt: new Date('2025-11-28'),
-    updatedAt: new Date('2025-11-28')
+    updatedAt: new Date('2025-11-28'),
+    fillName: () => {},
   },
   {
     id: '5',
@@ -174,7 +179,8 @@ export const mockPlayers: Player[] = [
     answers: [],
     version: 1,
     createdAt: new Date('2025-11-28'),
-    updatedAt: new Date('2025-11-28')
+    updatedAt: new Date('2025-11-28'),
+    fillName: () => {},
   },
   {
     id: '6',
@@ -184,7 +190,8 @@ export const mockPlayers: Player[] = [
     answers: [],
     version: 1,
     createdAt: new Date('2025-11-28'),
-    updatedAt: new Date('2025-11-28')
+    updatedAt: new Date('2025-11-28'),
+    fillName: () => {},
   },
 ];
 export const getMockPlayerAnswers = (gameId: number, questions: Question[], players: Player[]): PlayerAnswer[] => {
@@ -212,4 +219,10 @@ export const getMockPlayerAnswers = (gameId: number, questions: Question[], play
         updatedAt: new Date('2025-11-28'),
       };
     });
+};
+
+export const getQuestionCount = (playerCount = 2) => {
+  const byUserCount = [0, 5, 4, 4, 4, 2, 2, 1, 1, 1, 1];
+  if (playerCount < 1) return 0;
+  return (byUserCount[playerCount] ?? 0) + getQuestionCount(playerCount - 1);
 };

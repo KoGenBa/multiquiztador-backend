@@ -49,6 +49,22 @@ export const nouns: IGameNameNoun[] = [
     value: 'дрова',
     form: EWordForm.PLURAL,
   },
+  {
+    value: 'капибара',
+    form: EWordForm.FEMALE,
+  },
+  {
+    value: 'волк',
+    form: EWordForm.MALE,
+  },
+  {
+    value: 'животное',
+    form: EWordForm.NEUTRAL,
+  },
+  {
+    value: 'хомячки',
+    form: EWordForm.PLURAL,
+  },
 ];
 export const nounsR18: IGameNameNoun[] = [
   {
@@ -124,6 +140,12 @@ export const adjectives: TGameNameWord[] = [
     [EWordForm.NEUTRAL]: 'музыкальное',
     [EWordForm.PLURAL]: 'музыкальные',
   },
+  {
+    [EWordForm.MALE]: 'матёрый',
+    [EWordForm.FEMALE]: 'матёрая',
+    [EWordForm.NEUTRAL]: 'матёрое',
+    [EWordForm.PLURAL]: 'матёрые',
+  },
 ];
 export const adjectivesR18: TGameNameWord[] = [
   {
@@ -131,5 +153,11 @@ export const adjectivesR18: TGameNameWord[] = [
     [EWordForm.FEMALE]: 'блядская',
     [EWordForm.NEUTRAL]: 'блядское',
     [EWordForm.PLURAL]: 'блядские'
+  },
+  {
+    [EWordForm.MALE]: 'ёбнутый',
+    [EWordForm.FEMALE]: 'ёбнутая',
+    [EWordForm.NEUTRAL]: 'ёбнутое',
+    [EWordForm.PLURAL]: 'ёбнутые'
   }
 ];
