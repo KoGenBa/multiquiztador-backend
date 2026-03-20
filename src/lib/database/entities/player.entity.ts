@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { BeforeInsert, Column, Entity, ManyToMany, OneToMany } from 'typeorm';
-import { EWordForm } from 'src/lib/type';
+import { EUserType, EWordForm } from 'src/lib/type';
 import { adjectives, nouns } from 'src/lib/const';
 import { UserEntity } from './user.entity';
 import { Game } from './game.entity';
@@ -43,6 +43,8 @@ export class Player extends UserEntity {
   })
   @OneToMany(() => PlayerAnswer, (answer) => answer.player)
   answers: PlayerAnswer[];
+
+  userType: EUserType = EUserType.PLAYER;
 
   @BeforeInsert()
   fillName() {

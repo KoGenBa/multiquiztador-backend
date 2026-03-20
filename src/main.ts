@@ -10,9 +10,13 @@ let logger: Logger;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe({ transform: true }));
   const config = app.get(ConfigService);
   logger = config.logger;
+
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  app.useGlobalInterceptors(new LoggingInterceptor());
+  app.useGlobalGuards();
+
   const documentBuilder = new DocumentBuilder()
     .setTitle('Multiquiztador')
     .setVersion(process.env.npm_package_version ?? '0.0.1')
@@ -22,11 +26,12 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, documentBuilder);
   SwaggerModule.setup('/api', app, document);
-  app.useGlobalInterceptors(new LoggingInterceptor());
+
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
   await app.listen(config.port);
   return config.port;
 }
+
 bootstrap().then((port) =>
   logger?.log(`Server is running on port \u001b[33m${port}`),
 );

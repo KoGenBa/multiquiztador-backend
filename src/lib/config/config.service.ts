@@ -1,8 +1,15 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { env } from 'process';
 
 @Injectable()
 export class ConfigService {
-  public readonly port = Number(process.env.PORT ?? 3210);
+  public getEnvVar(key: string, defaultValue?: string): string {
+    return env[key] ?? defaultValue;
+  }
+
+  public readonly nodeEnv = this.getEnvVar('NODE_ENV', 'development');
+
+  public readonly port = Number(this.getEnvVar('PORT', '3210'));
 
   public readonly logger = new Logger('AppLogger');
 }

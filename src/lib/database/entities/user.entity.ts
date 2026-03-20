@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { EUserType } from 'src/lib/type';
 import {
   CreateDateColumn,
   PrimaryColumn,
@@ -40,4 +41,6 @@ export class UserEntity {
   })
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
+
+  userType?: EUserType;
 }

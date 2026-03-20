@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { hash } from 'crypto';
 import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm';
 import { UserEntity } from './user.entity';
+import { EUserType } from 'src/lib/type';
 
 @Entity()
 export class Admin extends UserEntity {
@@ -26,6 +27,8 @@ export class Admin extends UserEntity {
     select: false,
   })
   password: string;
+
+  userType: EUserType = EUserType.ADMIN;
 
   @BeforeInsert()
   @BeforeUpdate()
