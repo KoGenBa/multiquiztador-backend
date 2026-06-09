@@ -13,8 +13,8 @@ import { BaseEntity } from './base.entity';
 import { Player } from './player.entity';
 import { Question } from './question.entity';
 import { PlayerAnswer } from './player.answer.entity';
-import { EGameState, EWordForm } from 'src/lib/type';
-import { nouns, adjectives, nounsR18, adjectivesR18 } from 'src/lib/const';
+import { EGameState, EWordForm } from '@lib/type';
+import { nouns, adjectives, nounsR18, adjectivesR18 } from '@lib/const';
 import { Admin } from './admin.entity';
 
 @Entity()

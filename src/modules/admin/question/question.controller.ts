@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { ApiBody, ApiOkResponse } from '@nestjs/swagger';
 import { DeleteResult } from 'typeorm';
-import { Question } from 'src/lib/database/entities';
+import { Question } from '@lib/database/entities';
 import { QuestionService } from './question.service';
 import { CreateQuestionDto, UpdateQuestionDto } from './dto';
 

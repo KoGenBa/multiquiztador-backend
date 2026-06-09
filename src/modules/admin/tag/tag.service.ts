@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Tag } from 'src/lib/database/entities';
+import { Tag } from '@lib/database/entities';
 import { CreateTagDto, UpdateTagDto } from './dto';
 
 @Injectable()
@@ -19,7 +19,7 @@ export class TagService {
       await this.tagRepository.save(tag);
       return tag;
     } catch (error) {
-      if (error.message?.includes('duplicate key')) {
+      if (error instanceof Error && error.message?.includes('duplicate key')) {
         throw new HttpException(
           `Key "${dto.key}" already exists!`,
           HttpStatus.CONFLICT,

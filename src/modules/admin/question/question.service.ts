@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, In, Repository } from 'typeorm';
-import { Question, Tag } from 'src/lib/database/entities';
+import { Question, Tag } from '@lib/database/entities';
 import { CreateQuestionDto, UpdateQuestionDto } from './dto';
 
 @Injectable()

@@ -11,7 +11,7 @@ import {
 import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { GameService } from './game.service';
 import { CreateGameDto, FinishGameDto, StartGameDto, UpdateGameDto } from './dto';
-import { Game } from 'src/lib/database/entities';
+import { Game } from '@lib/database/entities';
 
 @Controller('game')
 export class GameController {

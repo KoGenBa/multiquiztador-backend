@@ -1,4 +1,4 @@
-import { Player, PlayerAnswer, Question } from 'src/lib/database/entities';
+import { Player, PlayerAnswer, Question } from '@lib/database/entities';
 import { EUserType } from '../type';
 const generateNumber = (upper?: number, lower?: number, decimal?: boolean) => {
   upper ??= 100;

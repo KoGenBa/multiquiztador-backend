@@ -1,9 +1,9 @@
 import { BadRequestException, ConflictException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Game, Player, PlayerAnswer, Question } from 'src/lib/database/entities';
-import { EGameState, EPlayerTitles, IGamePlayerStats } from 'src/lib/type';
-import { getQuestionCount } from 'src/lib/const';
+import { Game, Player, PlayerAnswer, Question } from '@lib/database/entities';
+import { EGameState, EPlayerTitles, IGamePlayerStats } from '@lib/type';
+import { getQuestionCount } from '@lib/const';
 import { CreateGameDto, StartGameDto, UpdateGameDto } from './dto';
 
 @Injectable()

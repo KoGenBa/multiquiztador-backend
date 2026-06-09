@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { BeforeInsert, Column, Entity, ManyToMany, OneToMany } from 'typeorm';
-import { EUserType, EWordForm } from 'src/lib/type';
-import { adjectives, nouns } from 'src/lib/const';
+import { EUserType, EWordForm } from '@lib/type';
+import { adjectives, nouns } from '@lib/const';
 import { UserEntity } from './user.entity';
 import { Game } from './game.entity';
 import { PlayerAnswer } from './player.answer.entity';

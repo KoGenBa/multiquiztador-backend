@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { EUserType } from 'src/lib/type';
+import { EUserType } from '@lib/type';
 import {
   CreateDateColumn,
   PrimaryColumn,

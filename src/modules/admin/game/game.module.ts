@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Game, Player, PlayerAnswer, Question } from 'src/lib/database/entities';
+import { Game, Player, PlayerAnswer, Question } from '@lib/database/entities';
 import { GameService } from './game.service';
 import { GameController } from './game.controller';
 

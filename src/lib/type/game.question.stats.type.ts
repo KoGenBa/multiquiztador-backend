@@ -1,4 +1,4 @@
-import { Player } from 'src/lib/database/entities';
+import { Player } from '@lib/database/entities';
 import { EPlayerTitles } from './title.type';
 
 export interface IQuestionSummary {}

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Question, Tag } from 'src/lib/database/entities';
+import { Question, Tag } from '@lib/database/entities';
 import { QuestionService } from './question.service';
 import { QuestionController } from './question.controller';
 
