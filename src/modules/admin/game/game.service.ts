@@ -106,7 +106,7 @@ export class GameService {
     const results = Object.values(playerScores).toSorted((a, b) => b.score - a.score);
     const minTotalDeltaUser = Object.values(playerScores).toSorted((a, b) => a.totalDelta - b.totalDelta)[0];
     const bestAverageUser = results.find((player) => player.id === minTotalDeltaUser.id);
-    if ('titles' in (bestAverageUser ?? {})) {
+    if (bestAverageUser) {
       bestAverageUser.titles.push(EPlayerTitles.BEST_AVERAGE);
     }
     const [goldScore, silverScore, bronzeScore] = Array.from(new Set(results.map(({ score }) => score))).toSorted((a, b) => b - a);

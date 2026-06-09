@@ -4,7 +4,7 @@ import { EPlayerTitles } from './title.type';
 export interface IQuestionSummary {}
 
 export type IGamePlayerStats = Partial<Player> & {
-  displayName: string;
+  displayName: string | null;
   score: number;
   questions: IQuestionSummary[];
   titles: EPlayerTitles[];

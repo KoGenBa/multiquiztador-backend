@@ -17,7 +17,7 @@ export class UserEntity {
     type: 'uuid',
     generated: 'uuid',
   })
-  id: string;
+  id!: string;
 
   @ApiProperty({
     type: 'number',
@@ -26,21 +26,21 @@ export class UserEntity {
   @VersionColumn({
     name: 'version',
   })
-  version: number;
+  version!: number;
 
   @ApiProperty({
     type: Date,
     example: new Date('2000-01-01'),
   })
   @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
+  createdAt!: Date;
 
   @ApiProperty({
     type: Date,
     example: new Date(),
   })
   @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
+  updatedAt!: Date;
 
   userType?: EUserType;
 }

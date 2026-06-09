@@ -15,7 +15,7 @@ export class PlayerAnswer extends BaseEntity {
     name: 'value',
     type: 'float',
   })
-  value: number;
+  value!: number;
 
   @ApiProperty({
     type: 'number',
@@ -26,7 +26,7 @@ export class PlayerAnswer extends BaseEntity {
     type: 'float',
     default: 0.0,
   })
-  deviation: number;
+  deviation!: number;
 
   @ApiProperty({
     type: 'number',
@@ -36,7 +36,7 @@ export class PlayerAnswer extends BaseEntity {
     name: 'question_id',
     type: 'int',
   })
-  questionId: number;
+  questionId!: number;
 
   @ApiProperty({
     type: 'string',
@@ -46,7 +46,7 @@ export class PlayerAnswer extends BaseEntity {
     name: 'player_id',
     type: 'varchar',
   })
-  playerId: string;
+  playerId!: string;
 
   @ApiProperty({
     type: 'number',
@@ -56,7 +56,7 @@ export class PlayerAnswer extends BaseEntity {
     name: 'game_id',
     type: 'int',
   })
-  gameId: number;
+  gameId!: number;
 
   @ApiProperty({
     type: () => Question,
@@ -65,7 +65,7 @@ export class PlayerAnswer extends BaseEntity {
     name: 'question_id',
   })
   @ManyToOne(() => Question)
-  question: Question;
+  question!: Question;
 
   @ApiProperty({
     type: () => Player,
@@ -74,7 +74,7 @@ export class PlayerAnswer extends BaseEntity {
     name: 'player_id',
   })
   @ManyToOne(() => Player)
-  player: Player;
+  player!: Player;
 
   @ApiProperty({
     type: () => Game,
@@ -83,5 +83,5 @@ export class PlayerAnswer extends BaseEntity {
     name: 'game_id',
   })
   @ManyToOne(() => Game)
-  game: Game;
+  game!: Game;
 }

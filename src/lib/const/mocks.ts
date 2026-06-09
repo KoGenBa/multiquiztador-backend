@@ -1,4 +1,4 @@
-import { Player, PlayerAnswer, Question } from '@lib/database/entities';
+import { Game, Player, PlayerAnswer, Question } from '@lib/database/entities';
 import { EUserType } from '../type';
 const generateNumber = (upper?: number, lower?: number, decimal?: boolean) => {
   upper ??= 100;
@@ -68,16 +68,16 @@ export const getMockPlayerAnswers = (gameId: number, questions: Question[], play
         gameId,
         value: question.answer + delta,
         deviation: Math.abs(delta),
-        question: null,
-        player: null,
-        game: null,
+        question,
+        player,
+        game: { id: gameId } as Game,
         createdAt: new Date('2025-11-28'),
         updatedAt: new Date('2025-11-28'),
       };
     });
 };
 
-export const getQuestionCount = (playerCount = 2) => {
+export const getQuestionCount = (playerCount = 2): number => {
   const byUserCount = [0, 5, 4, 4, 4, 2, 2, 1, 1, 1, 1];
   if (playerCount < 1) return 0;
   return (byUserCount[playerCount] ?? 0) + getQuestionCount(playerCount - 1);

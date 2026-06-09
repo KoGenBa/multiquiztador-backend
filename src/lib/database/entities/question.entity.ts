@@ -15,7 +15,7 @@ export class Question extends BaseEntity {
     name: 'question',
     type: 'varchar',
   })
-  question: string;
+  question!: string;
 
   @ApiProperty({
     type: 'number',
@@ -25,7 +25,7 @@ export class Question extends BaseEntity {
     name: 'answer',
     type: 'float',
   })
-  answer: number;
+  answer!: number;
 
   @ApiProperty({
     type: 'string',
@@ -37,7 +37,7 @@ export class Question extends BaseEntity {
     length: 500,
     nullable: true,
   })
-  comment: string;
+  comment!: string | null;
 
   @ApiProperty({
     type: 'number',
@@ -48,7 +48,7 @@ export class Question extends BaseEntity {
     type: 'float',
     default: 0.0,
   })
-  minDelta: number;
+  minDelta!: number;
 
   @ApiProperty({
     type: 'number',
@@ -59,7 +59,7 @@ export class Question extends BaseEntity {
     type: 'float',
     default: 0.0,
   })
-  maxDelta: number;
+  maxDelta!: number;
 
   @ApiProperty({
     type: 'number',
@@ -70,26 +70,26 @@ export class Question extends BaseEntity {
     type: 'float',
     default: 0.0,
   })
-  meanSquaredError: number;
+  meanSquaredError!: number;
 
   @ApiProperty({
     type: () => Tag,
     isArray: true,
   })
   @ManyToMany(() => Tag, (tag) => tag.questions)
-  tags: Tag[];
+  tags!: Tag[];
 
   @ApiProperty({
     type: () => PlayerAnswer,
     isArray: true,
   })
   @OneToMany(() => PlayerAnswer, (answer) => answer.question)
-  playerAnswers: PlayerAnswer[];
+  playerAnswers!: PlayerAnswer[];
 
   @ApiProperty({
     type: () => Game,
     isArray: true,
   })
   @ManyToMany(() => Game, (game) => game.questions)
-  games: Game[];
+  games!: Game[];
 }

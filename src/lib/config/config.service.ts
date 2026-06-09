@@ -3,7 +3,7 @@ import { env } from 'process';
 
 @Injectable()
 export class ConfigService {
-  public getEnvVar(key: string, defaultValue?: string): string {
+  public getEnvVar(key: string, defaultValue?: string): string | undefined {
     return env[key] ?? defaultValue;
   }
 

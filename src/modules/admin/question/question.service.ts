@@ -35,7 +35,7 @@ export class QuestionService {
     return this.questionRepository.find();
   }
 
-  async findOne(id: number): Promise<Question> {
+  async findOne(id: number): Promise<Question | null> {
     return this.questionRepository.findOne({ where: { id } });
   }
 
@@ -43,9 +43,10 @@ export class QuestionService {
     try {
       const { tags, ...rest } = dto;
       let question = await this.questionRepository.findOne({ where: { id } });
-      for (const key in rest) {
-        question[key] = rest[key];
+      if (!question) {
+        throw new Error('Question with specified ID is not found!');
       }
+      Object.assign(question, rest);
       if (tags) {
         question = await this.setQuestionTags(question, tags);
       }

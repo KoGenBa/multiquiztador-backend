@@ -14,7 +14,7 @@ export class Admin extends UserEntity {
     name: 'email',
     type: 'varchar',
   })
-  email: string;
+  email!: string;
 
   @ApiProperty({
     type: 'string',
@@ -26,7 +26,7 @@ export class Admin extends UserEntity {
     length: 45,
     select: false,
   })
-  password: string;
+  password!: string;
 
   userType: EUserType = EUserType.ADMIN;
 

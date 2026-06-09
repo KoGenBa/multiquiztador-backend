@@ -29,7 +29,7 @@ export class Game extends BaseEntity {
     length: 500,
     nullable: true,
   })
-  comment: string;
+  comment!: string | null;
 
   @ApiProperty({
     type: 'number',
@@ -40,7 +40,7 @@ export class Game extends BaseEntity {
     type: 'int',
     default: 0,
   })
-  questionsUsed: number;
+  questionsUsed!: number;
 
   @ApiProperty({
     type: 'number',
@@ -51,7 +51,7 @@ export class Game extends BaseEntity {
     type: 'int',
     default: 0,
   })
-  playersParticipated: number;
+  playersParticipated!: number;
 
   @ApiProperty({
     type: 'number',
@@ -62,7 +62,7 @@ export class Game extends BaseEntity {
     type: 'int',
     default: 0,
   })
-  uniqueTopics: number;
+  uniqueTopics!: number;
 
   @ApiProperty({
     type: 'number',
@@ -73,7 +73,7 @@ export class Game extends BaseEntity {
     type: 'float',
     default: 0.0,
   })
-  minDelta: number;
+  minDelta!: number;
 
   @ApiProperty({
     type: 'number',
@@ -84,7 +84,7 @@ export class Game extends BaseEntity {
     type: 'float',
     default: 0.0,
   })
-  maxDelta: number;
+  maxDelta!: number;
 
   @ApiProperty({
     type: 'number',
@@ -95,7 +95,7 @@ export class Game extends BaseEntity {
     type: 'float',
     default: 0.0,
   })
-  meanSquaredError: number;
+  meanSquaredError!: number;
 
   @ApiProperty({
     type: 'number',
@@ -106,7 +106,7 @@ export class Game extends BaseEntity {
     type: 'int',
     default: 0,
   })
-  topScore: number;
+  topScore!: number;
 
   @ApiProperty({
     type: () => EGameState,
@@ -120,7 +120,7 @@ export class Game extends BaseEntity {
     nullable: false,
     default: EGameState.CREATED,
   })
-  gameState: EGameState;
+  gameState!: EGameState;
 
   @ApiProperty({
     type: 'string',
@@ -132,7 +132,7 @@ export class Game extends BaseEntity {
     name: 'game_title',
     nullable: false,
   })
-  gameTitle: string;
+  gameTitle!: string;
 
   @ApiProperty({
     type: 'string',
@@ -143,7 +143,7 @@ export class Game extends BaseEntity {
     type: 'uuid',
     nullable: true,
   })
-  adminId: string;
+  adminId!: string | null;
 
   @ApiProperty({
     type: 'string',
@@ -154,7 +154,7 @@ export class Game extends BaseEntity {
     type: 'uuid',
     nullable: true,
   })
-  winnerId: string;
+  winnerId!: string | null;
 
   @ApiProperty({
     type: 'boolean',
@@ -165,7 +165,7 @@ export class Game extends BaseEntity {
     type: 'boolean',
     nullable: true,
   })
-  allowR18: boolean;
+  allowR18!: boolean | null;
 
   @ApiProperty({
     type: () => Admin,
@@ -174,7 +174,7 @@ export class Game extends BaseEntity {
   @JoinColumn({
     name: 'admin_id',
   })
-  gameAdmin: Admin;
+  gameAdmin!: Admin | null;
 
   @ApiProperty({
     type: () => Player,
@@ -190,7 +190,7 @@ export class Game extends BaseEntity {
     },
   })
   @ManyToMany(() => Player, (player) => player.gamesParticipated)
-  players: Player[];
+  players!: Player[];
 
   @ApiProperty({
     type: () => Player,
@@ -199,7 +199,7 @@ export class Game extends BaseEntity {
     name: 'winner_id',
   })
   @ManyToOne(() => Player, { onDelete: 'SET NULL' })
-  winner: Player;
+  winner!: Player | null;
 
   @ApiProperty({
     type: () => Question,
@@ -215,14 +215,14 @@ export class Game extends BaseEntity {
     },
   })
   @ManyToMany(() => Question, (question) => question.games)
-  questions: Question[];
+  questions!: Question[];
 
   @ApiProperty({
     type: () => PlayerAnswer,
     isArray: true,
   })
   @OneToMany(() => PlayerAnswer, (answer) => answer.game)
-  playerAnswers: PlayerAnswer[];
+  playerAnswers!: PlayerAnswer[];
 
   @BeforeInsert()
   fillName() {

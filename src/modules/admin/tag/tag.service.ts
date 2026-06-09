@@ -39,7 +39,7 @@ export class TagService {
     }
   }
 
-  async findOne(id: number): Promise<Tag> {
+  async findOne(id: number): Promise<Tag | null> {
     try {
       const tag = await this.tagRepository.findOneBy({ id });
       return tag;
@@ -52,9 +52,10 @@ export class TagService {
   async update(id: number, dto: UpdateTagDto): Promise<Tag> {
     try {
       const tag = await this.tagRepository.findOneBy({ id });
-      for (const key in dto) {
-        tag[key] = dto[key];
+      if (!tag) {
+        throw new HttpException('Tag with specified ID is not found!', HttpStatus.NOT_FOUND);
       }
+      Object.assign(tag, dto);
       await this.tagRepository.save(tag);
       return tag;
     } catch (error) {
@@ -63,9 +64,10 @@ export class TagService {
     }
   }
 
-  async remove(id: number): Promise<Tag> {
+  async remove(id: number): Promise<Tag | null> {
     try {
       const tag = await this.tagRepository.findOneBy({ id });
+      if (!tag) { return null; }
       await this.tagRepository.remove(tag);
       return tag;
     } catch (error) {

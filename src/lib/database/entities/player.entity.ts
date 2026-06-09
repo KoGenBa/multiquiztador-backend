@@ -17,7 +17,7 @@ export class Player extends UserEntity {
     name: 'display_name',
     nullable: true,
   })
-  displayName: string;
+  displayName!: string | null;
 
   @ApiProperty({
     type: 'number',
@@ -28,21 +28,21 @@ export class Player extends UserEntity {
     name: 'score',
     default: 0,
   })
-  score: number;
+  score!: number;
 
   @ApiProperty({
     type: () => Game,
     isArray: true,
   })
   @ManyToMany(() => Game, (game) => game.players)
-  gamesParticipated: Game[];
+  gamesParticipated!: Game[];
 
   @ApiProperty({
     type: () => PlayerAnswer,
     isArray: true,
   })
   @OneToMany(() => PlayerAnswer, (answer) => answer.player)
-  answers: PlayerAnswer[];
+  answers!: PlayerAnswer[];
 
   userType: EUserType = EUserType.PLAYER;
 
