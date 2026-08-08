@@ -19,14 +19,14 @@ export class CreateQuestionDto {
   })
   @IsString()
   @IsNotEmpty()
-  question: string;
+  question!: string;
 
   @ApiProperty({
     type: Number,
     example: 100500,
   })
   @IsNumber()
-  answer: number;
+  answer!: number;
 
   @ApiPropertyOptional({
     type: String,

@@ -5,12 +5,12 @@ export class CreateTagDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  key: string;
+  key!: string;
 
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  title: string;
+  title!: string;
 
   @ApiPropertyOptional()
   @IsString()

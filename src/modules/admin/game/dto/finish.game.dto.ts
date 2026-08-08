@@ -5,5 +5,5 @@ export class FinishGameDto {
   @ApiProperty()
   @IsNumber()
   @Min(1)
-  gameId: number;
+  gameId!: number;
 }

@@ -5,7 +5,7 @@ export class StartGameDto {
   @ApiProperty()
   @IsNumber()
   @Min(1)
-  gameId: number;
+  gameId!: number;
 
   @ApiPropertyOptional()
   @IsOptional()
